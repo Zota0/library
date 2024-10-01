@@ -67,7 +67,7 @@
             $this->conn = $conn;
         }
 
-        public function SQL(string $sql, string|null $params) {
+        public function SQL(string $sql, array|null $params) {
             if($this->conn == null) {
                 $this->ConnectToDB();
             }
@@ -75,12 +75,21 @@
             $query = null;
             if($params != null) {
                 $binds = "";
-                for($i = strlen($params); $i > 0; $i--) {
-                    $binds .= "s";
+                
+                foreach($params as $k => $v) {
+                    if(gettype($v) == "string") {
+                        $binds .= "s";
+                    } else if(gettype($v) == "integer") {
+                        $binds .= "i";
+                    } else if(gettype($v) == "double") {
+                        $binds .= "d";
+                    } else if(gettype($v) == "boolean") {
+                        $binds .= "b";
+                    }
                 }
 
                 $query_stmt = $this->conn->prepare($sql);
-                $query = $query_stmt->bind_param($binds, $params);
+                $query = $query_stmt->bind_param($binds, [...$params]);
             } else {
                 $query = $this->conn->query($sql, MYSQLI_BOTH);
             }
@@ -101,7 +110,17 @@
                 "a_num" => $sql->fetch_all(MYSQLI_NUM),
                 "a_both" => $sql->fetch_all(MYSQLI_BOTH),
 
+                "count" => $sql->num_rows,
+
                 default => null,
             };
+        }
+
+        public function Close() {
+            if($this->conn != null) {
+                $this->conn->close();
+                return 0;
+            }
+            return 1;
         }
     }
