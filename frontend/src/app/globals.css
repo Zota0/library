@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+:root {
+--background: #121024;
+--foreground: #5f20ba;
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+.wh-full {
+    @apply w-full h-full;
+}
+
+.mp-0 {
+    @apply m-0 p-0;
+}
+
+.center {
+    @apply flex justify-center items-center object-center align-middle;
+}
