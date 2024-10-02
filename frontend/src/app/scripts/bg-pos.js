@@ -4,9 +4,12 @@ let animationFrameId;
 const style = getComputedStyle(document.body);
 
 function updateCursorPosition() {
-    style.setProperty('--cursor-x', cursorPosition.x + 'px');
-    style.setProperty('--cursor-y', cursorPosition.y + 'px');
+    style.setProperty('--cursor-x', cursorPosition.x + '%');
+    style.setProperty('--cursor-y', cursorPosition.y + '%');
     animationFrameId = requestAnimationFrame(updateCursorPosition);
+
+    console.log(style.getPropertyValue('--cursor-x'));
+    console.log(style.getPropertyValue('--cursor-y'));
 }
 
 document.addEventListener('mousemove', (event) => {
