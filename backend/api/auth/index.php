@@ -2,15 +2,17 @@
     session_start();
     const DEFAULT_JSON_TYPE = JSON_PRETTY_PRINT;
 
+    require_once "database.php";
+    require_once "encryption.php";
+
     header("Content-Type: application/json");
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-    require_once "database.php";
-    require_once "encryption.php";
+    error_reporting(0);
 
-    // error_reporting(0);
+    $_SESSION['token'] = GenerateKey();
 
     $db = new database();
     {
@@ -34,10 +36,12 @@
     try {
 
         require_once match($path) {
-            "/auth/get-token" => Handle("res/get-token.php"),
-            "/auth/abort" => Handle("res/abort.php"),
-
-            "/auth/add-book" => Handle("res/add-book.php"),
+            "/api/auth/get-token" => Handle("res/get-token.php"),
+            "/api/auth/abort" => Handle("res/abort.php"),
+            
+            "/api/auth/get-books" => Handle("res/get-books.php"),
+            "/api/auth/add-book" => Handle("res/add-book.php"),
+            
             default => Handle("res/404.php"),
         };
     
@@ -46,5 +50,9 @@
             "status" => "error",
             "message" => $e->getMessage(),
             "data" => null,
-        ]);
+        ], DEFAULT_JSON_TYPE);
+    }
+
+    if($db) {
+        $db->Close();
     }

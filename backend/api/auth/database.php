@@ -67,7 +67,12 @@
             $this->conn = $conn;
         }
 
-        public function SQL(string $sql, array|null $params) {
+        public function SQL(
+                string $sql,
+                array|null $params = null,
+                int|null $result_mode = null
+            ) {
+            
             if($this->conn == null) {
                 $this->ConnectToDB();
             }
@@ -91,13 +96,13 @@
                 $query_stmt = $this->conn->prepare($sql);
                 $query = $query_stmt->bind_param($binds, [...$params]);
             } else {
-                $query = $this->conn->query($sql, MYSQLI_BOTH);
+                $query = $this->conn->query($sql, $result_mode);
             }
 
             return $query;
         }
 
-        public function Fetch(string $f_type,mysqli_result $sql) {
+        public function Fetch(string $f_type, $sql) {
             return match($f_type) {
                 "n_assoc" => $sql->fetch_array(MYSQLI_ASSOC),
                 "n_num" => $sql->fetch_array(MYSQLI_NUM),
