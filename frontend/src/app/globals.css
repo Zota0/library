@@ -4,13 +4,26 @@
 @tailwind variants;
 
 :root {
---background: #121024;
---foreground: #5f20ba;
+    --cursor-x: 50%;
+    --cursor-y: 50%;
+    
+    --background: rgb(138, 73, 0);
+    
+    --bg-start: rgb(87, 46, 0);
+    --bg-end: rgb(163, 90, 0);
+    
+    --foreground: whitesmoke;
 }
 
 body {
     color: var(--foreground);
     background: var(--background);
+
+    background: radial-gradient(
+        circle at var(--cursor-x) var(--cursor-y),
+        var(--bg-start) 30%,
+        var(--bg-end) 100%
+    );
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -29,5 +42,51 @@ body {
 }
 
 .center {
-    @apply flex justify-center items-center object-center align-middle;
+    @apply flex origin-center content-center place-items-center justify-center items-center object-center align-middle;
+}
+
+.navbox {
+    @apply w-full drop-shadow-2xl shadow-2xl shadow-black outline-yellow-700 outline-1 rounded-3xl outline outline-offset-2 cursor-pointer h-48 aspect-square bg-slate-600;
+
+    background-image: url("https://images.photowall.com/products/84850/vintage-bookshelf.jpg?h=699&q=85");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+
+    color: whitesmoke;
+
+    &>span {
+        transition: filter 0.1s ease-in;
+
+        -webkit-backdrop-filter: blur(0px);
+        backdrop-filter: blur(0px);
+
+        @apply center;
+
+        width: 100%;
+        height: 100%;
+
+        text-align: center;
+
+        font-weight: 600;
+        font-size: 1.95rem;
+
+        text-shadow: 2px 2px 3px black,
+                -2px -2px 6px white;
+
+        -webkit-user-select: text;
+        user-select: text;
+
+        &:hover {
+            -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+
+            -webkit-user-select: none;
+            user-select: none;
+
+            filter: contrast(150%);
+        }
+    }
+
 }

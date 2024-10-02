@@ -8,7 +8,6 @@
         
 
         if($_GET == null || $_GET['token'] != $_SESSION['token']) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid token', 'data' => null]);
             return 1;
         }
 
