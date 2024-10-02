@@ -13,13 +13,14 @@
     );
 
     foreach($book() as $k => $v) {
-        if($v == null) {
+        if($v == null && $v != 0) {
+            error_log("Problem at: ". $k . " with value: ". $v);
             echo json_encode(['status' => 'error', 'message' => 'Not enough data', 'data' => null]);
             exit;
         }
     }
 
     $addBook_sql = $db->SQL("INSERT INTO books (title, author, genre, isbn, publisher, pages) VALUES (?, ?, ?, ?, ?, ?)", 
-    $book());
+    [$book->title, $book->author, $book->genre, $book->isbn, $book->publisher, $book->pages], null);
 
 

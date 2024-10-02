@@ -92,9 +92,10 @@
                         $binds .= "b";
                     }
                 }
+                $params_ = [...$params];
 
                 $query_stmt = $this->conn->prepare($sql);
-                $query = $query_stmt->bind_param($binds, [...$params]);
+                $query = $query_stmt->bind_param($binds, ...$params_);
             } else {
                 $query = $this->conn->query($sql, $result_mode);
             }

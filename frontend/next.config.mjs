@@ -35,7 +35,8 @@ const nextConfig = {
     images: {
         domains: ['localhost', 'localhost:3454', 'localhost:3000'],
         unoptimized: true,
-    }
+    },
+
 };
 
 export default nextConfig;
