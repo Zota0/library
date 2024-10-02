@@ -30,11 +30,12 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-svh w-screen`}
 			>
-                <Script src="./scripts/bg-pos.js"></Script>
-				<main className="w-full h-full">{children}</main>
+				<Script src='https://raw.githubusercontent.com/Zota0/library/266308f24532d33f60961f9e1c75a77a9ad0a704/frontend/src/app/scripts/bg-pos.js'></Script>
+				<main className='w-full h-full'>{children}</main>
 			</body>
 		</html>
 	);
 }
+
 
 
