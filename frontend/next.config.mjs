@@ -4,7 +4,7 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                source: '/api/:path*',
+                source: '/back/api/:path*',
                 destination: 'http://localhost:3454/api/:path*',
             },
         ];
@@ -13,7 +13,7 @@ const nextConfig = {
     async headers() {
         return [
             {
-                source: '/api/:path*',
+                source: '/back/api/:path*',
                 headers: [
                     {
                         key: 'Access-Control-Allow-Origin',

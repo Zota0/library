@@ -46,8 +46,13 @@ body {
     @apply flex origin-center content-center place-items-center justify-center items-center object-center align-middle;
 }
 
-input, select, textarea, button[type="submit"] {
+input, select, textarea {
     @apply rounded-md p-2 bg-yellow-700 text-gray-100 font-semibold outline outline-2 outline-yellow-600 m-2;
+
+    &::placeholder,
+    &:default {
+        @apply text-gray-400 font-extralight;
+    }
 
     &:hover, &:focus {
         @apply bg-yellow-600 font-bold text-white;
@@ -57,13 +62,47 @@ input, select, textarea, button[type="submit"] {
         @apply bg-yellow-500 font-semibold text-white;
     }
 
+    &:hover, &:focus, &:active {
+        &::placeholder {
+            @apply text-gray-200 font-extralight;
+        }
+    }
+
     &:user-valid {
-        @apply outline-green-500;
+        @apply outline-green-500 text-lime-100;
     }
 
     &:user-invalid {
-        @apply outline-red-500;
+        @apply outline-red-500 text-red-300;
     }
+}
+
+button {
+    @apply rounded-md p-2 bg-yellow-700 text-gray-100 font-semibold outline outline-2 outline-yellow-600 m-2;
+
+    &::placeholder, &:default {
+        @apply text-gray-100 font-semibold;
+    }
+}
+
+label {
+    @apply rounded-md px-2 text-yellow-800 uppercase text-justify font-extrabold mx-2;
+}
+
+.group-lab_ip {
+    @apply flex flex-col w-full h-full mb-4 cursor-default;
+}
+
+.group-lab_ip > * {
+    @apply cursor-text;
+}
+
+.input-optional {
+    @apply text-gray-400 font-mono ring-2 ring-gray-600 bg-gray-700 text-sm rounded-xl lowercase;
+    
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 .navbox {
@@ -110,4 +149,35 @@ input, select, textarea, button[type="submit"] {
         }
     }
 
+}
+
+.option-title {
+    @apply text-xl font-sans font-semibold;
+}
+
+.option-author {
+    @apply text-sm font-mono font-light;
+}
+
+.autocomplete-wrapper {
+    position: relative;
+}
+
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    /* Position below the input */
+    left: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #343469;
+    border: 1px solid #ccc;
+    z-index: 10;
+    /* Ensure it's above other elements */
+}
+
+.autocomplete-list li {
+    padding: 5px 10px;
+    cursor: pointer;
 }

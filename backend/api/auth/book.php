@@ -2,12 +2,12 @@
 
     class Book {
         public function __construct(
-            public string $title,
-            public string $author,
-            public string $genre,
-            public string $isbn,
-            public string $publisher,
-            public int $pages
+            public string|null $title,
+            public string|null $author,
+            public string|null $genre,
+            public string|null $isbn,
+            public string|null $publisher,
+            public int|null $pages
         ) {}
 
         public function toArray(): array {

@@ -1,26 +1,44 @@
 <?php
     require_once 'check-token.php';
     require_once 'book.php';
+
     if(CheckToken() != 0) throw new Exception("Token is invalid");
+    if(!$db) throw new Exception("Database connection failed");
+    
+    $postData = json_decode(file_get_contents('php://input'), true);
 
-    $book = new Book(
-        $_POST['title'] ?? "No title given",
-        $_POST['author'] ?? "No author provided",
-        $_POST['genre'] ?? "No genre given",
-        $_POST['isbn'] ?? "No ISBN given",
-        $_POST['publisher'] ?? "No publisher given",
-        $_POST['pages'] ?? 0,
-    );
+    $title = $postData['title'] ?? "null";
+    $author = $postData['author'] ?? "null";
+    $genre = $postData['genre'] ?? "null";
+    $isbn = $postData['isbn'] ?? "null";
+    $publisher = $postData['publisher'] ?? "null";
+    $pages = (int)($postData['pages'] ?? 0);
 
-    foreach($book() as $k => $v) {
-        if($v == null && $v != 0) {
-            error_log("Problem at: ". $k . " with value: ". $v);
-            echo json_encode(['status' => 'error', 'message' => 'Not enough data', 'data' => null]);
-            exit;
-        }
+
+    if (!$title || !$author) {
+        http_response_code(400); // Bad Request
+        echo json_encode(['status' => 'error', 'message' => 'Title and author are required.', 'data' => null]);
+        exit;
     }
 
-    $addBook_sql = $db->SQL("INSERT INTO books (title, author, genre, isbn, publisher, pages) VALUES (?, ?, ?, ?, ?, ?)", 
-    [$book->title, $book->author, $book->genre, $book->isbn, $book->publisher, $book->pages], null);
+    $book = new Book($title, $author, $genre, $isbn, $publisher, $pages);
+
+    error_log(implode(", ", $book()));
 
 
+    try {
+        $addBook_sql = $db->SQL("INSERT INTO books VALUES (?, ?, ?, ?, ?, ?, ?)",
+            ["id", $book->title, $book->author, $book->genre, $book->isbn, $book->publisher, $book->pages]);
+
+        if ($addBook_sql) {
+            echo json_encode(['status' => 'success', 'message' => 'Book added successfully', 'data' => 'null']);
+        } else {
+            http_response_code(500); // Internal Server Error
+
+            echo json_encode(['status' => 'error', 'message' => 'Database error.']);
+        }
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage(), 'data' => null]);
+    }
+?>

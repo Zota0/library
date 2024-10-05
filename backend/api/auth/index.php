@@ -34,7 +34,7 @@
 
 
     try {
-
+        http_response_code(200);
         require_once match($path) {
             "/api/auth/get-token" => Handle("res/get-token.php"),
             "/api/auth/abort" => Handle("res/abort.php"),
@@ -46,6 +46,7 @@
         };
     
     } catch (Exception $e) {
+        http_response_code(404);
         echo json_encode([
             "status" => "error",
             "message" => $e->getMessage(),
