@@ -7,11 +7,24 @@ const nextConfig = {
                 source: '/back/api/:path*',
                 destination: 'http://localhost:3454/api/:path*',
             },
+            {
+                source: '/wolnelektury/:path*',
+                destination: 'https://wolnelektury.pl/api/:path*',
+            }
         ];
     },
 
     async headers() {
         return [
+            {
+                source: '/wolnelektury/:path*', 
+                headers: [
+                    {
+                        key: 'Access-Control-Allow-Origin',
+                        value: '*',
+                    },
+                ],
+            },
             {
                 source: '/back/api/:path*',
                 headers: [

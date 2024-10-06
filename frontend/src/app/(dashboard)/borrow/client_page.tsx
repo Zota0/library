@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { SelectSearch } from "@/components/select"; // Adjust path as needed
-import { length } from './../../../../node_modules/stylis/src/Tokenizer';
+import { SelectAndSearch } from "@/components/select_and_search";
 
 interface Book {
     id: number;
@@ -16,14 +15,15 @@ interface Book {
 
 export default function View() {
     const [books, setBooks] = useState<Book[]>([]);
-    const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+    const [selectedBook, setSelectedBook] = useState<number | null>(null);
 
-    const GetBooks = async () => {
+    // Fetch books from the API
+    const getBooks = async () => {
         try {
             const res = await fetch(`/back/api/auth/get-books?token=test`, {
                 method: "GET",
                 headers: {
-                    "Accept": "application/json",
+                    Accept: "application/json",
                     "Content-Type": "application/json",
                 },
             });
@@ -44,34 +44,45 @@ export default function View() {
         }
     };
 
+    // Fetch books when component mounts
     useEffect(() => {
-        GetBooks();
+        getBooks();
     }, []);
+
+    // Map books to values for SelectAndSearch
+    const values = books.map((book) => ({
+        label: `${book.title} - ${book.author}`,
+        id: book.id,
+    }));
 
     return (
         <div>
-            <h2>Books</h2>
-            <select
-                autoComplete="on"
+            <SelectAndSearch
+                selected={(id) => setSelectedBook(id)}
+                values={values}
+                disabled={false}
+                inputPlaceholder="Wyszukaj i wybierz książkę"
                 name="book"
-                title="Select a book"
-            >
-                <option disabled selected>Wybierz książkę</option>
-                {
-                    (books && books.length > 0) ? books.map(book => (
-                        <option
-                            key={book.id}
-                            value={book.id}
-                        >
-                        <>
-                            <span className="option-title">
-                                {book.title}
-                            </span> - <span className="option-author">{book.author}</span>
-                        </>
-                        </option>
-                    )) : null
-                }
-            </select>
+            />
+
+            {/* Display selected book details if a book is selected */}
+            {selectedBook !== null && (
+                <div>
+                    <h2>Selected Book Details:</h2>
+                    {books
+                        .filter((book) => book.id === selectedBook)
+                        .map((book) => (
+                            <div key={book.id}>
+                                <p>Title: {book.title}</p>
+                                <p>Author: {book.author}</p>
+                                <p>Genre: {book.genre}</p>
+                                <p>Publisher: {book.publisher}</p>
+                                <p>ISBN: {book.isbn}</p>
+                                <p>Pages: {book.pages}</p>
+                            </div>
+                        ))}
+                </div>
+            )}
         </div>
     );
-};
+}

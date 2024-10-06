@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 
 export default function Page() {
 	
-    const View = dynamic(() => import('./client_page'), {ssr: false});
+    const View = dynamic(() => import('./client_page'), {ssr: true});
 
     return (
 		<div className='center flex-col w-screen h-full'>
