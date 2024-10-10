@@ -21,6 +21,12 @@
         exit;
     }
 
+    if(!$db || $db->connect_errno) {
+        http_response(400);
+        echo json_encode(['status' => 'error', 'message' => 'Cannot connect to Database! Contact your server administrator!', 'data' => null]);
+        exit;
+    }
+
     $book = new Book($title, $author, $genre, $isbn, $publisher, $pages);
 
     error_log(implode(", ", $book()));
